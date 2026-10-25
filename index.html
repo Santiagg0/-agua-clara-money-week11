@@ -110,6 +110,13 @@ button:hover {
   background: #075b88;
 }
 
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #ffba49;
+  outline-offset: 3px;
+}
+
 .metric {
   font-size: 32px;
   font-weight: bold;
@@ -197,16 +204,18 @@ button:hover {
   margin-top: 20px;
 }
 
-.money-highlight h3 {
-  color: white;
-}
-
+.money-highlight h3,
 .money-highlight .metric {
   color: white;
 }
 
 .error {
   color: #a32020;
+  font-weight: bold;
+}
+
+.status {
+  color: #075b88;
   font-weight: bold;
 }
 
@@ -293,6 +302,10 @@ footer {
   <button type="button" onclick="analyze()">
     🔍 Analizar consumo
   </button>
+
+  <p id="analysisStatus" class="status" role="status">
+    Pendiente: realiza primero el análisis del consumo.
+  </p>
 
 </section>
 
@@ -582,6 +595,17 @@ const zones = {
 };
 
 // ==========================================
+// APPLICATION STATE
+// ==========================================
+
+// Store the scenario that was actually analyzed.
+// This prevents financial calculations using an
+// unverified or newly changed scenario.
+
+let analyzedScenario = null;
+let analyzedZone = null;
+
+// ==========================================
 // K-NEAREST NEIGHBORS CLASSIFIER
 // ==========================================
 
@@ -611,6 +635,47 @@ function classifyKNN(flow, k = 3) {
 }
 
 // ==========================================
+// RESET ANALYSIS
+// ==========================================
+
+function resetAnalysis() {
+
+  analyzedScenario = null;
+  analyzedZone = null;
+
+  document.getElementById("reading").textContent =
+    "-- L/h";
+
+  document.getElementById("waterBar").style.width =
+    "0%";
+
+  document.getElementById("sensorDescription").textContent =
+    "Selecciona un escenario y presiona analizar.";
+
+  const riskElement =
+    document.getElementById("riskResult");
+
+  riskElement.className = "risk";
+  riskElement.textContent = "Sin analizar";
+
+  document.getElementById("mlDescription").textContent =
+    "El modelo comparará la lectura con ejemplos previamente clasificados.";
+
+  document.getElementById("geoResult").textContent =
+    "Selecciona una zona para visualizar su contexto.";
+
+  document.getElementById("recommendation").textContent =
+    "Ejecuta el análisis para recibir una recomendación.";
+
+  document.getElementById("analysisStatus").textContent =
+    "Pendiente: realiza primero el análisis del consumo.";
+
+  document.getElementById("moneyError").textContent = "";
+
+  clearMoneyResults();
+}
+
+// ==========================================
 // SENSOR ANALYSIS
 // ==========================================
 
@@ -626,6 +691,7 @@ function analyze() {
   const zone = zones[zoneKey];
 
   if (!scenario || !zone) {
+    resetAnalysis();
     alert("Selecciona opciones válidas.");
     return;
   }
@@ -633,11 +699,15 @@ function analyze() {
   const flow = scenario.flow;
 
   if (!Number.isFinite(flow) || flow < 0) {
+    resetAnalysis();
     alert("Lectura inválida.");
     return;
   }
 
   const classification = classifyKNN(flow);
+
+  analyzedScenario = scenarioKey;
+  analyzedZone = zoneKey;
 
   document.getElementById("reading").textContent =
     flow + " L/h";
@@ -704,7 +774,11 @@ function analyze() {
     " | Longitud ilustrativa: " + zone.longitude +
     ". Ubicación de demostración.";
 
-  // Clear previous financial results when scenario changes.
+  document.getElementById("analysisStatus").textContent =
+    "✅ Análisis completado. Ahora puedes calcular el impacto económico.";
+
+  document.getElementById("moneyError").textContent = "";
+
   clearMoneyResults();
 }
 
@@ -714,10 +788,46 @@ function analyze() {
 
 function calculateMoney() {
 
-  const scenarioKey =
+  const error =
+    document.getElementById("moneyError");
+
+  error.textContent = "";
+
+  const selectedScenario =
     document.getElementById("scenario").value;
 
-  const scenario = scenarios[scenarioKey];
+  const selectedZone =
+    document.getElementById("zone").value;
+
+  // BUG FIX 1:
+  // Require analysis before financial calculation.
+  //
+  // BUG FIX 2:
+  // Ensure the selected scenario and zone
+  // match the last completed analysis.
+
+  if (
+    analyzedScenario === null ||
+    analyzedZone === null ||
+    analyzedScenario !== selectedScenario ||
+    analyzedZone !== selectedZone
+  ) {
+
+    clearMoneyResults();
+
+    error.textContent =
+      "Primero presiona Analizar consumo para evaluar el escenario seleccionado.";
+
+    return;
+  }
+
+  const scenario = scenarios[analyzedScenario];
+
+  if (!scenario) {
+    clearMoneyResults();
+    error.textContent = "Escenario inválido.";
+    return;
+  }
 
   const tariffInput =
     document.getElementById("tariff");
@@ -728,13 +838,7 @@ function calculateMoney() {
   const tariff = Number(tariffInput.value);
   const repairCost = Number(repairInput.value);
 
-  const error =
-    document.getElementById("moneyError");
-
-  error.textContent = "";
-
   if (
-    !scenario ||
     tariffInput.value.trim() === "" ||
     repairInput.value.trim() === "" ||
     !Number.isFinite(tariff) ||
@@ -745,10 +849,11 @@ function calculateMoney() {
     repairCost > 1000000
   ) {
 
+    clearMoneyResults();
+
     error.textContent =
       "Ingresa una tarifa y un costo de reparación válidos.";
 
-    clearMoneyResults();
     return;
   }
 
@@ -832,15 +937,33 @@ function clearMoneyResults() {
     "Calcula el impacto para visualizar tu ahorro potencial.";
 }
 
-// Clear results when financial inputs change.
-document.getElementById("tariff")
-  .addEventListener("input", clearMoneyResults);
+// ==========================================
+// EVENT LISTENERS
+// ==========================================
 
-document.getElementById("repairCost")
-  .addEventListener("input", clearMoneyResults);
+// Changing the scenario or geographic zone
+// invalidates the previous analysis.
 
 document.getElementById("scenario")
-  .addEventListener("change", clearMoneyResults);
+  .addEventListener("change", resetAnalysis);
+
+document.getElementById("zone")
+  .addEventListener("change", resetAnalysis);
+
+// Changing financial inputs invalidates
+// previous financial calculations only.
+
+document.getElementById("tariff")
+  .addEventListener("input", function() {
+    clearMoneyResults();
+    document.getElementById("moneyError").textContent = "";
+  });
+
+document.getElementById("repairCost")
+  .addEventListener("input", function() {
+    clearMoneyResults();
+    document.getElementById("moneyError").textContent = "";
+  });
 
 </script>
 
