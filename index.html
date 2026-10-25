@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGUA CLARA MONEY | Week 11</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef5fa;
+      color: #183047;
+    }
+
+    header {
+      background: linear-gradient(120deg, #083b68, #087eab);
+      color: white;
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    header h1 { margin: 0 0 10px; font-size: 32px; }
+
+    .badge {
+      display: inline-block;
+      background: #d9f5ff;
+      color: #075478;
+      padding: 7px 13px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 18px #12345612;
+    }
+
+    h2 { color: #075b88; margin-top: 0; }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd9e4;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    button {
+      background: #087eab;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 18px;
+    }
+
+    button:hover { background: #075b88; }
+
+    .metric {
+      font-size: 35px;
+      font-weight: bold;
+      color: #075b88;
+      margin: 12px 0;
+    }
+
+    .muted { color: #607789; font-size: 14px; }
+
+    .notice {
+      padding: 13px;
+      background: #e6f5ff;
+      border-left: 4px solid #087eab;
+      border-radius: 6px;
+      margin: 15px 0;
+    }
+
+    .risk {
+      font-size: 22px;
+      font-weight: bold;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .normal { background: #d9f8e7; color: #12683b; }
+    .warning { background: #fff0c4; color: #8b5700; }
+    .danger { background: #ffe0e0; color: #a32020; }
+
+    .bar-container {
+      background: #e4edf3;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .bar {
+      height: 100%;
+      background: #087eab;
+      width: 0%;
+      transition: width 0.5s;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #607789;
+      font-size: 13px;
+    }
+
+    @media(max-width: 650px) {
+      .grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 25px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <span class="badge">BUSINESS BENDING · WEEK 11 · MONEY</span>
+  <h1>💧 AGUA CLARA MONEY</h1>
+  <p>Detecta patrones de consumo y comprende su impacto económico.</p>
+  <small>Prototipo educativo con datos simulados</small>
+</header>
+
+<main>
+
+  <section class="card">
+    <h2>1. Configura tu análisis</h2>
+
+    <p>
+      Selecciona un escenario de consumo de agua.
+      Nuestro modelo de Machine Learning analizará
+      las lecturas simuladas.
+    </p>
+
+    <label for="scenario">Escenario del sensor IoT</label>
+    <select id="scenario">
+      <option value="normal">Consumo normal</option>
+      <option value="moderate">Posible fuga</option>
+      <option value="severe">Fuga de alto riesgo</option>
+    </select>
+
+    <label for="zone">Zona geográfica simulada</label>
+    <select id="zone">
+      <option value="centro">Zona Centro (ficticia)</option>
+      <option value="norte">Zona Norte (ficticia)</option>
+      <option value="sur">Zona Sur (ficticia)</option>
+    </select>
+
+    <div class="notice">
+      Los datos de sensores y las zonas son simulados.
+      No se utilizan medidores reales ni información personal.
+    </div>
+
+    <button onclick="analyze()">🔍 Analizar consumo</button>
+  </section>
+
+  <div class="grid">
+
+    <section class="card">
+      <h2>2. Lectura del sensor</h2>
+      <p class="muted">Flujo de agua simulado</p>
+      <div class="metric" id="reading">-- L/h</div>
+
+      <div class="bar-container">
+        <div class="bar" id="waterBar"></div>
+      </div>
+
+      <p id="sensorDescription">
+        Selecciona un escenario y presiona analizar.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>3. Machine Learning</h2>
+      <p class="muted">Clasificación mediante k-NN</p>
+
+      <div id="riskResult" class="risk">
+        Sin analizar
+      </div>
+
+      <p id="mlDescription">
+        El modelo comparará la lectura con ejemplos
+        previamente clasificados.
+      </p>
+    </section>
+
+  </div>
+
+  <section class="card">
+    <h2>4. Contexto geográfico</h2>
+
+    <p id="geoResult">
+      Selecciona una zona para visualizar su contexto.
+    </p>
+
+    <div class="notice">
+      Las zonas son ficticias y sirven únicamente
+      para demostrar la integración de geodata.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>5. Recomendación</h2>
+
+    <p id="recommendation">
+      Ejecuta el análisis para recibir una recomendación.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>💰 Próximamente: MONEY Calculator</h2>
+    <p>
+      En la siguiente versión agregaremos el cálculo
+      de pérdidas económicas estimadas en pesos mexicanos.
+    </p>
+    <p class="muted">
+      Esta función se implementará en el commit 4.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  AGUA CLARA MONEY · Week 11 · DRAGON STACK<br>
+  IoT simulado + Machine Learning + Geodata<br>
+  Prototipo educativo. No constituye un diagnóstico de fugas.
+</footer>
+
+<script>
+  "use strict";
+
+  // Dataset sintético de entrenamiento:
+  // lectura en litros/hora y clasificación conocida.
+  const trainingData = [
+    {flow: 4, label: "normal"},
+    {flow: 7, label: "normal"},
+    {flow: 9, label: "normal"},
+    {flow: 12, label: "normal"},
+    {flow: 27, label: "warning"},
+    {flow: 32, label: "warning"},
+    {flow: 38, label: "warning"},
+    {flow: 43, label: "warning"},
+    {flow: 65, label: "danger"},
+    {flow: 72, label: "danger"},
+    {flow: 80, label: "danger"},
+    {flow: 90, label: "danger"}
+  ];
+
+  // Escenarios simulados.
+  const scenarios = {
+    normal: {
+      flow: 8,
+      description: "Lectura dentro del rango normal simulado."
+    },
+    moderate: {
+      flow: 35,
+      description: "Lectura superior al consumo de referencia."
+    },
+    severe: {
+      flow: 75,
+      description: "Lectura considerablemente elevada."
+    }
+  };
+
+  // Geodata ficticia.
+  const zones = {
+    centro: {
+      name: "Zona Centro",
+      latitude: 19.43,
+      longitude: -99.13
+    },
+    norte: {
+      name: "Zona Norte",
+      latitude: 19.55,
+      longitude: -99.18
+    },
+    sur: {
+      name: "Zona Sur",
+      latitude: 19.30,
+      longitude: -99.17
+    }
+  };
+
+  // Clasificador k-Nearest Neighbors real,
+  // utilizando distancia euclidiana en una dimensión.
+  function classifyKNN(flow, k = 3) {
+    const neighbors = trainingData
+      .map(point => ({
+        distance: Math.abs(point.flow - flow),
+        label: point.label
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, k);
+
+    const votes = {
+      normal: 0,
+      warning: 0,
+      danger: 0
+    };
+
+    neighbors.forEach(point => {
+      votes[point.label]++;
+    });
+
+    return Object.keys(votes).sort(
+      (a, b) => votes[b] - votes[a]
+    )[0];
+  }
+
+  function analyze() {
+    const scenarioKey =
+      document.getElementById("scenario").value;
+
+    const zoneKey =
+      document.getElementById("zone").value;
+
+    const scenario = scenarios[scenarioKey];
+    const zone = zones[zoneKey];
+
+    if (!scenario || !zone) {
+      alert("Selecciona opciones válidas.");
+      return;
+    }
+
+    const flow = scenario.flow;
+
+    if (!Number.isFinite(flow) || flow < 0) {
+      alert("Lectura inválida.");
+      return;
+    }
+
+    const classification = classifyKNN(flow);
+
+    document.getElementById("reading").textContent =
+      flow + " L/h";
+
+    document.getElementById("sensorDescription").textContent =
+      scenario.description;
+
+    document.getElementById("waterBar").style.width =
+      Math.min((flow / 100) * 100, 100) + "%";
+
+    const riskElement =
+      document.getElementById("riskResult");
+
+    const mlDescription =
+      document.getElementById("mlDescription");
+
+    const recommendation =
+      document.getElementById("recommendation");
+
+    riskElement.className = "risk";
+
+    if (classification === "normal") {
+      riskElement.textContent = "🟢 Consumo normal";
+      riskElement.classList.add("normal");
+
+      mlDescription.textContent =
+        "El modelo clasificó la lectura como normal.";
+
+      recommendation.textContent =
+        "No se detecta un patrón anormal en este escenario. " +
+        "Continúa revisando tu consumo periódicamente.";
+    }
+
+    if (classification === "warning") {
+      riskElement.textContent = "🟡 Posible fuga";
+      riskElement.classList.add("warning");
+
+      mlDescription.textContent =
+        "El modelo identificó un patrón de consumo elevado.";
+
+      recommendation.textContent =
+        "Revisa llaves, tuberías y sanitarios. " +
+        "Si el consumo continúa elevado, solicita una revisión.";
+    }
+
+    if (classification === "danger") {
+      riskElement.textContent = "🔴 Riesgo alto";
+      riskElement.classList.add("danger");
+
+      mlDescription.textContent =
+        "El modelo identificó un patrón de consumo muy elevado.";
+
+      recommendation.textContent =
+        "Verifica inmediatamente si existe una fuga. " +
+        "Considera solicitar una inspección profesional.";
+    }
+
+    document.getElementById("geoResult").textContent =
+      zone.name +
+      " | Latitud ilustrativa: " + zone.latitude +
+      " | Longitud ilustrativa: " + zone.longitude +
+      ". Ubicación de demostración; no representa un domicilio real.";
+  }
+</script>
+
+</body>
+</html>
