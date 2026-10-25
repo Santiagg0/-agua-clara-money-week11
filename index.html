@@ -1,428 +1,847 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AGUA CLARA MONEY | Week 11</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #eef5fa;
-      color: #183047;
-    }
+<title>AGUA CLARA MONEY | Week 11</title>
 
-    header {
-      background: linear-gradient(120deg, #083b68, #087eab);
-      color: white;
-      padding: 35px 20px;
-      text-align: center;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    header h1 { margin: 0 0 10px; font-size: 32px; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eef5fa;
+  color: #183047;
+}
 
-    .badge {
-      display: inline-block;
-      background: #d9f5ff;
-      color: #075478;
-      padding: 7px 13px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: bold;
-    }
+header {
+  background: linear-gradient(120deg, #083b68, #087eab);
+  color: white;
+  padding: 45px 20px;
+  text-align: center;
+}
 
-    main {
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 0 16px;
-    }
+header h1 {
+  margin: 15px 0;
+  font-size: 36px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
+header p {
+  font-size: 17px;
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 5px 18px #12345612;
-    }
+.badge {
+  display: inline-block;
+  background: #d9f5ff;
+  color: #075478;
+  padding: 8px 15px;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: bold;
+}
 
-    h2 { color: #075b88; margin-top: 0; }
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
 
-    label {
-      display: block;
-      margin: 15px 0 7px;
-      font-weight: bold;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
 
-    select, input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd9e4;
-      border-radius: 9px;
-      font-size: 16px;
-    }
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 20px rgba(18, 52, 86, 0.08);
+}
 
-    button {
-      background: #087eab;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 15px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 18px;
-    }
+.grid > .card {
+  min-width: 0;
+}
 
-    button:hover { background: #075b88; }
+h2 {
+  color: #075b88;
+  margin-top: 0;
+}
 
-    .metric {
-      font-size: 35px;
-      font-weight: bold;
-      color: #075b88;
-      margin: 12px 0;
-    }
+h3 {
+  color: #183047;
+}
 
-    .muted { color: #607789; font-size: 14px; }
+label {
+  display: block;
+  margin: 16px 0 8px;
+  font-weight: bold;
+}
 
-    .notice {
-      padding: 13px;
-      background: #e6f5ff;
-      border-left: 4px solid #087eab;
-      border-radius: 6px;
-      margin: 15px 0;
-    }
+select,
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #cbd9e4;
+  border-radius: 9px;
+  font-size: 16px;
+  background: white;
+}
 
-    .risk {
-      font-size: 22px;
-      font-weight: bold;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
+button {
+  background: #087eab;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 15px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+}
 
-    .normal { background: #d9f8e7; color: #12683b; }
-    .warning { background: #fff0c4; color: #8b5700; }
-    .danger { background: #ffe0e0; color: #a32020; }
+button:hover {
+  background: #075b88;
+}
 
-    .bar-container {
-      background: #e4edf3;
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 12px 0;
-    }
+.metric {
+  font-size: 32px;
+  font-weight: bold;
+  color: #075b88;
+  margin: 15px 0;
+  overflow-wrap: anywhere;
+}
 
-    .bar {
-      height: 100%;
-      background: #087eab;
-      width: 0%;
-      transition: width 0.5s;
-    }
+.muted {
+  color: #607789;
+  font-size: 14px;
+  line-height: 1.6;
+}
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #607789;
-      font-size: 13px;
-    }
+.notice {
+  padding: 15px;
+  background: #e6f5ff;
+  border-left: 4px solid #087eab;
+  border-radius: 7px;
+  margin: 18px 0;
+  line-height: 1.6;
+}
 
-    @media(max-width: 650px) {
-      .grid { grid-template-columns: 1fr; }
-      header h1 { font-size: 25px; }
-    }
-  </style>
+.risk {
+  font-size: 22px;
+  font-weight: bold;
+  padding: 18px;
+  border-radius: 10px;
+  text-align: center;
+  background: #eef5fa;
+}
+
+.normal {
+  background: #d9f8e7;
+  color: #12683b;
+}
+
+.warning {
+  background: #fff0c4;
+  color: #8b5700;
+}
+
+.danger {
+  background: #ffe0e0;
+  color: #a32020;
+}
+
+.bar-container {
+  background: #e4edf3;
+  height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.bar {
+  height: 100%;
+  background: #087eab;
+  width: 0%;
+  transition: width 0.5s;
+}
+
+.money-card {
+  background: #f4fbff;
+  border: 1px solid #dceef8;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+
+.money-card h3 {
+  font-size: 15px;
+  margin-top: 0;
+}
+
+.money-card .metric {
+  font-size: 27px;
+}
+
+.money-highlight {
+  background: linear-gradient(120deg, #083b68, #087eab);
+  color: white;
+  border-radius: 14px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.money-highlight h3 {
+  color: white;
+}
+
+.money-highlight .metric {
+  color: white;
+}
+
+.error {
+  color: #a32020;
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  padding: 35px;
+  color: #607789;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+@media (max-width: 650px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  header h1 {
+    font-size: 27px;
+  }
+
+  .metric {
+    font-size: 27px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <span class="badge">BUSINESS BENDING · WEEK 11 · MONEY</span>
+  <span class="badge">
+    BUSINESS BENDING · WEEK 11 · MONEY
+  </span>
+
   <h1>💧 AGUA CLARA MONEY</h1>
-  <p>Detecta patrones de consumo y comprende su impacto económico.</p>
-  <small>Prototipo educativo con datos simulados</small>
+
+  <p>
+    Detecta patrones de consumo de agua y comprende
+    su impacto económico.
+  </p>
+
+  <small>
+    IoT simulado + Machine Learning + Geodata + MONEY
+  </small>
 </header>
 
 <main>
 
-  <section class="card">
-    <h2>1. Configura tu análisis</h2>
+<section class="card">
 
-    <p>
-      Selecciona un escenario de consumo de agua.
-      Nuestro modelo de Machine Learning analizará
-      las lecturas simuladas.
+  <h2>1. Configura tu análisis</h2>
+
+  <p>
+    Selecciona un escenario de consumo.
+    Nuestro modelo de Machine Learning analizará
+    las lecturas simuladas.
+  </p>
+
+  <label for="scenario">
+    Escenario del sensor IoT
+  </label>
+
+  <select id="scenario">
+    <option value="normal">Consumo normal</option>
+    <option value="moderate">Posible fuga</option>
+    <option value="severe">Fuga de alto riesgo</option>
+  </select>
+
+  <label for="zone">
+    Zona geográfica simulada
+  </label>
+
+  <select id="zone">
+    <option value="centro">Zona Centro (ficticia)</option>
+    <option value="norte">Zona Norte (ficticia)</option>
+    <option value="sur">Zona Sur (ficticia)</option>
+  </select>
+
+  <div class="notice">
+    Los datos de sensores y las zonas son simulados.
+    No utilizamos medidores reales ni información personal.
+  </div>
+
+  <button type="button" onclick="analyze()">
+    🔍 Analizar consumo
+  </button>
+
+</section>
+
+<div class="grid">
+
+  <section class="card">
+
+    <h2>2. Lectura del sensor</h2>
+
+    <p class="muted">
+      Flujo de agua simulado
     </p>
 
-    <label for="scenario">Escenario del sensor IoT</label>
-    <select id="scenario">
-      <option value="normal">Consumo normal</option>
-      <option value="moderate">Posible fuga</option>
-      <option value="severe">Fuga de alto riesgo</option>
-    </select>
-
-    <label for="zone">Zona geográfica simulada</label>
-    <select id="zone">
-      <option value="centro">Zona Centro (ficticia)</option>
-      <option value="norte">Zona Norte (ficticia)</option>
-      <option value="sur">Zona Sur (ficticia)</option>
-    </select>
-
-    <div class="notice">
-      Los datos de sensores y las zonas son simulados.
-      No se utilizan medidores reales ni información personal.
+    <div class="metric" id="reading">
+      -- L/h
     </div>
 
-    <button onclick="analyze()">🔍 Analizar consumo</button>
+    <div class="bar-container">
+      <div class="bar" id="waterBar"></div>
+    </div>
+
+    <p id="sensorDescription">
+      Selecciona un escenario y presiona analizar.
+    </p>
+
   </section>
 
-  <div class="grid">
+  <section class="card">
 
-    <section class="card">
-      <h2>2. Lectura del sensor</h2>
-      <p class="muted">Flujo de agua simulado</p>
-      <div class="metric" id="reading">-- L/h</div>
+    <h2>3. Machine Learning</h2>
 
-      <div class="bar-container">
-        <div class="bar" id="waterBar"></div>
-      </div>
+    <p class="muted">
+      Clasificación mediante k-Nearest Neighbors (k-NN)
+    </p>
 
-      <p id="sensorDescription">
-        Selecciona un escenario y presiona analizar.
+    <div id="riskResult" class="risk" aria-live="polite">
+      Sin analizar
+    </div>
+
+    <p id="mlDescription">
+      El modelo comparará la lectura con ejemplos
+      previamente clasificados.
+    </p>
+
+  </section>
+
+</div>
+
+<section class="card">
+
+  <h2>4. Contexto geográfico</h2>
+
+  <p id="geoResult">
+    Selecciona una zona para visualizar su contexto.
+  </p>
+
+  <div class="notice">
+    Las zonas y coordenadas son ilustrativas.
+    No representan domicilios ni ubicaciones
+    de sensores reales.
+  </div>
+
+</section>
+
+<section class="card">
+
+  <h2>5. Recomendación</h2>
+
+  <p id="recommendation">
+    Ejecuta el análisis para recibir una recomendación.
+  </p>
+
+</section>
+
+<section class="card" id="moneyCalculator">
+
+  <h2>💰 6. Calculadora MONEY</h2>
+
+  <p>
+    Descubre cuánto dinero podría representar
+    un consumo excesivo de agua.
+  </p>
+
+  <div class="notice">
+    Los cálculos son ilustrativos y no representan
+    una factura real. Se supone que el flujo excedente
+    permanece constante durante 24 horas al día,
+    30 días al mes.
+  </div>
+
+  <label for="tariff">
+    Tarifa estimada del agua (MXN por m³)
+  </label>
+
+  <input
+    type="number"
+    id="tariff"
+    value="25"
+    min="0"
+    max="10000"
+    step="0.01"
+  >
+
+  <label for="repairCost">
+    Costo estimado de reparación (MXN)
+  </label>
+
+  <input
+    type="number"
+    id="repairCost"
+    value="500"
+    min="0"
+    max="1000000"
+    step="0.01"
+  >
+
+  <button type="button" onclick="calculateMoney()">
+    💰 Calcular impacto económico
+  </button>
+
+  <p id="moneyError" class="error" role="alert"></p>
+
+  <div class="grid" style="margin-top:25px">
+
+    <div class="money-card">
+      <h3>💧 Agua excedente mensual</h3>
+      <div class="metric" id="waterLoss">--</div>
+      <p class="muted">
+        Metros cúbicos adicionales estimados.
       </p>
-    </section>
+    </div>
 
-    <section class="card">
-      <h2>3. Machine Learning</h2>
-      <p class="muted">Clasificación mediante k-NN</p>
-
-      <div id="riskResult" class="risk">
-        Sin analizar
-      </div>
-
-      <p id="mlDescription">
-        El modelo comparará la lectura con ejemplos
-        previamente clasificados.
+    <div class="money-card">
+      <h3>💸 Pérdida económica mensual</h3>
+      <div class="metric" id="monthlyLoss">--</div>
+      <p class="muted">
+        Costo estimado del consumo excedente.
       </p>
-    </section>
+    </div>
+
+    <div class="money-card">
+      <h3>📅 Pérdida económica anual</h3>
+      <div class="metric" id="annualLoss">--</div>
+      <p class="muted">
+        Proyección ilustrativa de 12 meses.
+      </p>
+    </div>
+
+    <div class="money-card">
+      <h3>🔧 Recuperación de la reparación</h3>
+      <div class="metric" id="payback">--</div>
+      <p class="muted">
+        Meses estimados para recuperar el costo.
+      </p>
+    </div>
 
   </div>
 
-  <section class="card">
-    <h2>4. Contexto geográfico</h2>
+  <div class="money-highlight">
 
-    <p id="geoResult">
-      Selecciona una zona para visualizar su contexto.
-    </p>
+    <h3>💰 Ahorro potencial</h3>
 
-    <div class="notice">
-      Las zonas son ficticias y sirven únicamente
-      para demostrar la integración de geodata.
+    <div class="metric" id="potentialSavings">
+      --
     </div>
-  </section>
 
-  <section class="card">
-    <h2>5. Recomendación</h2>
+    <p id="moneyRecommendation">
+      Calcula el impacto para visualizar
+      tu ahorro potencial.
+    </p>
 
-    <p id="recommendation">
-      Ejecuta el análisis para recibir una recomendación.
-    </p>
-  </section>
+  </div>
 
-  <section class="card">
-    <h2>💰 Próximamente: MONEY Calculator</h2>
-    <p>
-      En la siguiente versión agregaremos el cálculo
-      de pérdidas económicas estimadas en pesos mexicanos.
-    </p>
-    <p class="muted">
-      Esta función se implementará en el commit 4.
-    </p>
-  </section>
+</section>
+
+<section class="card">
+
+  <h2>7. Transparencia y seguridad</h2>
+
+  <p>
+    AGUA CLARA MONEY es un prototipo educativo
+    que utiliza datos sintéticos.
+  </p>
+
+  <p>
+    El modelo k-NN clasifica patrones simulados
+    de consumo, pero no confirma fugas reales.
+  </p>
+
+  <p>
+    Las estimaciones financieras dependen de
+    una tarifa introducida por el usuario.
+    No sustituyen una factura oficial.
+  </p>
+
+  <p>
+    La aplicación no solicita nombres,
+    contraseñas, domicilios ni información bancaria.
+  </p>
+
+</section>
 
 </main>
 
 <footer>
-  AGUA CLARA MONEY · Week 11 · DRAGON STACK<br>
+
+  AGUA CLARA MONEY · BUSINESS BENDING WEEK 11<br>
+
+  DRAGON STACK:
   IoT simulado + Machine Learning + Geodata<br>
-  Prototipo educativo. No constituye un diagnóstico de fugas.
+
+  MONEY LENS:
+  Economic Impact & Savings<br><br>
+
+  Prototipo educativo con información simulada.<br>
+  No constituye un diagnóstico técnico.
+
 </footer>
 
 <script>
-  "use strict";
+"use strict";
 
-  // Dataset sintético de entrenamiento:
-  // lectura en litros/hora y clasificación conocida.
-  const trainingData = [
-    {flow: 4, label: "normal"},
-    {flow: 7, label: "normal"},
-    {flow: 9, label: "normal"},
-    {flow: 12, label: "normal"},
-    {flow: 27, label: "warning"},
-    {flow: 32, label: "warning"},
-    {flow: 38, label: "warning"},
-    {flow: 43, label: "warning"},
-    {flow: 65, label: "danger"},
-    {flow: 72, label: "danger"},
-    {flow: 80, label: "danger"},
-    {flow: 90, label: "danger"}
+// ==========================================
+// SYNTHETIC TRAINING DATA
+// ==========================================
+
+const trainingData = [
+  {flow: 4, label: "normal"},
+  {flow: 7, label: "normal"},
+  {flow: 9, label: "normal"},
+  {flow: 12, label: "normal"},
+
+  {flow: 27, label: "warning"},
+  {flow: 32, label: "warning"},
+  {flow: 38, label: "warning"},
+  {flow: 43, label: "warning"},
+
+  {flow: 65, label: "danger"},
+  {flow: 72, label: "danger"},
+  {flow: 80, label: "danger"},
+  {flow: 90, label: "danger"}
+];
+
+// ==========================================
+// SIMULATED IOT SENSOR SCENARIOS
+// ==========================================
+
+const scenarios = {
+  normal: {
+    flow: 8,
+    description: "Lectura dentro del rango normal simulado."
+  },
+
+  moderate: {
+    flow: 35,
+    description: "Lectura superior al consumo de referencia."
+  },
+
+  severe: {
+    flow: 75,
+    description: "Lectura considerablemente elevada."
+  }
+};
+
+// ==========================================
+// SIMULATED GEODATA
+// ==========================================
+
+const zones = {
+  centro: {
+    name: "Zona Centro",
+    latitude: 19.43,
+    longitude: -99.13
+  },
+
+  norte: {
+    name: "Zona Norte",
+    latitude: 19.55,
+    longitude: -99.18
+  },
+
+  sur: {
+    name: "Zona Sur",
+    latitude: 19.30,
+    longitude: -99.17
+  }
+};
+
+// ==========================================
+// K-NEAREST NEIGHBORS CLASSIFIER
+// ==========================================
+
+function classifyKNN(flow, k = 3) {
+
+  const neighbors = trainingData
+    .map(point => ({
+      distance: Math.abs(point.flow - flow),
+      label: point.label
+    }))
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, k);
+
+  const votes = {
+    normal: 0,
+    warning: 0,
+    danger: 0
+  };
+
+  neighbors.forEach(point => {
+    votes[point.label]++;
+  });
+
+  return Object.keys(votes).sort(
+    (a, b) => votes[b] - votes[a]
+  )[0];
+}
+
+// ==========================================
+// SENSOR ANALYSIS
+// ==========================================
+
+function analyze() {
+
+  const scenarioKey =
+    document.getElementById("scenario").value;
+
+  const zoneKey =
+    document.getElementById("zone").value;
+
+  const scenario = scenarios[scenarioKey];
+  const zone = zones[zoneKey];
+
+  if (!scenario || !zone) {
+    alert("Selecciona opciones válidas.");
+    return;
+  }
+
+  const flow = scenario.flow;
+
+  if (!Number.isFinite(flow) || flow < 0) {
+    alert("Lectura inválida.");
+    return;
+  }
+
+  const classification = classifyKNN(flow);
+
+  document.getElementById("reading").textContent =
+    flow + " L/h";
+
+  document.getElementById("sensorDescription").textContent =
+    scenario.description;
+
+  document.getElementById("waterBar").style.width =
+    Math.min(flow, 100) + "%";
+
+  const riskElement =
+    document.getElementById("riskResult");
+
+  const mlDescription =
+    document.getElementById("mlDescription");
+
+  const recommendation =
+    document.getElementById("recommendation");
+
+  riskElement.className = "risk";
+
+  if (classification === "normal") {
+
+    riskElement.textContent = "🟢 Consumo normal";
+    riskElement.classList.add("normal");
+
+    mlDescription.textContent =
+      "El modelo clasificó la lectura como normal.";
+
+    recommendation.textContent =
+      "No se identifica un patrón anormal en este escenario. " +
+      "Continúa revisando tu consumo periódicamente.";
+  }
+
+  if (classification === "warning") {
+
+    riskElement.textContent = "🟡 Posible fuga";
+    riskElement.classList.add("warning");
+
+    mlDescription.textContent =
+      "El modelo identificó un patrón de consumo elevado.";
+
+    recommendation.textContent =
+      "Revisa llaves, tuberías y sanitarios. " +
+      "Si el consumo continúa elevado, solicita una revisión.";
+  }
+
+  if (classification === "danger") {
+
+    riskElement.textContent = "🔴 Riesgo alto";
+    riskElement.classList.add("danger");
+
+    mlDescription.textContent =
+      "El modelo identificó un patrón de consumo muy elevado.";
+
+    recommendation.textContent =
+      "Verifica si existe una fuga y considera " +
+      "solicitar una inspección profesional.";
+  }
+
+  document.getElementById("geoResult").textContent =
+    zone.name +
+    " | Latitud ilustrativa: " + zone.latitude +
+    " | Longitud ilustrativa: " + zone.longitude +
+    ". Ubicación de demostración.";
+
+  // Clear previous financial results when scenario changes.
+  clearMoneyResults();
+}
+
+// ==========================================
+// MONEY CALCULATOR
+// ==========================================
+
+function calculateMoney() {
+
+  const scenarioKey =
+    document.getElementById("scenario").value;
+
+  const scenario = scenarios[scenarioKey];
+
+  const tariffInput =
+    document.getElementById("tariff");
+
+  const repairInput =
+    document.getElementById("repairCost");
+
+  const tariff = Number(tariffInput.value);
+  const repairCost = Number(repairInput.value);
+
+  const error =
+    document.getElementById("moneyError");
+
+  error.textContent = "";
+
+  if (
+    !scenario ||
+    tariffInput.value.trim() === "" ||
+    repairInput.value.trim() === "" ||
+    !Number.isFinite(tariff) ||
+    !Number.isFinite(repairCost) ||
+    tariff < 0 ||
+    tariff > 10000 ||
+    repairCost < 0 ||
+    repairCost > 1000000
+  ) {
+
+    error.textContent =
+      "Ingresa una tarifa y un costo de reparación válidos.";
+
+    clearMoneyResults();
+    return;
+  }
+
+  // Synthetic baseline: 8 liters per hour.
+  const baseline = 8;
+
+  // Excess flow above baseline.
+  const excessFlow =
+    Math.max(0, scenario.flow - baseline);
+
+  // Convert L/h to monthly m³.
+  const monthlyWaterLoss =
+    excessFlow * 24 * 30 / 1000;
+
+  // Estimated financial impact.
+  const monthlyCost =
+    monthlyWaterLoss * tariff;
+
+  const annualCost =
+    monthlyCost * 12;
+
+  // Estimated repair payback.
+  const paybackMonths =
+    monthlyCost > 0
+      ? repairCost / monthlyCost
+      : null;
+
+  const money = value =>
+    new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN"
+    }).format(value);
+
+  document.getElementById("waterLoss").textContent =
+    monthlyWaterLoss.toFixed(2) + " m³";
+
+  document.getElementById("monthlyLoss").textContent =
+    money(monthlyCost);
+
+  document.getElementById("annualLoss").textContent =
+    money(annualCost);
+
+  document.getElementById("payback").textContent =
+    paybackMonths === null
+      ? "No aplica"
+      : paybackMonths.toFixed(1) + " meses";
+
+  document.getElementById("potentialSavings").textContent =
+    money(monthlyCost) + " / mes";
+
+  document.getElementById("moneyRecommendation").textContent =
+    monthlyCost > 0
+      ? "Si se elimina completamente el consumo excedente, " +
+        "el ahorro potencial ilustrativo sería de " +
+        money(monthlyCost) +
+        " al mes. La reparación debe evaluarse " +
+        "con un profesional."
+      : "Este escenario no presenta consumo excedente " +
+        "respecto a la referencia simulada.";
+}
+
+// ==========================================
+// RESET FINANCIAL OUTPUTS
+// ==========================================
+
+function clearMoneyResults() {
+
+  const ids = [
+    "waterLoss",
+    "monthlyLoss",
+    "annualLoss",
+    "payback",
+    "potentialSavings"
   ];
 
-  // Escenarios simulados.
-  const scenarios = {
-    normal: {
-      flow: 8,
-      description: "Lectura dentro del rango normal simulado."
-    },
-    moderate: {
-      flow: 35,
-      description: "Lectura superior al consumo de referencia."
-    },
-    severe: {
-      flow: 75,
-      description: "Lectura considerablemente elevada."
-    }
-  };
+  ids.forEach(id => {
+    document.getElementById(id).textContent = "--";
+  });
 
-  // Geodata ficticia.
-  const zones = {
-    centro: {
-      name: "Zona Centro",
-      latitude: 19.43,
-      longitude: -99.13
-    },
-    norte: {
-      name: "Zona Norte",
-      latitude: 19.55,
-      longitude: -99.18
-    },
-    sur: {
-      name: "Zona Sur",
-      latitude: 19.30,
-      longitude: -99.17
-    }
-  };
+  document.getElementById("moneyRecommendation").textContent =
+    "Calcula el impacto para visualizar tu ahorro potencial.";
+}
 
-  // Clasificador k-Nearest Neighbors real,
-  // utilizando distancia euclidiana en una dimensión.
-  function classifyKNN(flow, k = 3) {
-    const neighbors = trainingData
-      .map(point => ({
-        distance: Math.abs(point.flow - flow),
-        label: point.label
-      }))
-      .sort((a, b) => a.distance - b.distance)
-      .slice(0, k);
+// Clear results when financial inputs change.
+document.getElementById("tariff")
+  .addEventListener("input", clearMoneyResults);
 
-    const votes = {
-      normal: 0,
-      warning: 0,
-      danger: 0
-    };
+document.getElementById("repairCost")
+  .addEventListener("input", clearMoneyResults);
 
-    neighbors.forEach(point => {
-      votes[point.label]++;
-    });
+document.getElementById("scenario")
+  .addEventListener("change", clearMoneyResults);
 
-    return Object.keys(votes).sort(
-      (a, b) => votes[b] - votes[a]
-    )[0];
-  }
-
-  function analyze() {
-    const scenarioKey =
-      document.getElementById("scenario").value;
-
-    const zoneKey =
-      document.getElementById("zone").value;
-
-    const scenario = scenarios[scenarioKey];
-    const zone = zones[zoneKey];
-
-    if (!scenario || !zone) {
-      alert("Selecciona opciones válidas.");
-      return;
-    }
-
-    const flow = scenario.flow;
-
-    if (!Number.isFinite(flow) || flow < 0) {
-      alert("Lectura inválida.");
-      return;
-    }
-
-    const classification = classifyKNN(flow);
-
-    document.getElementById("reading").textContent =
-      flow + " L/h";
-
-    document.getElementById("sensorDescription").textContent =
-      scenario.description;
-
-    document.getElementById("waterBar").style.width =
-      Math.min((flow / 100) * 100, 100) + "%";
-
-    const riskElement =
-      document.getElementById("riskResult");
-
-    const mlDescription =
-      document.getElementById("mlDescription");
-
-    const recommendation =
-      document.getElementById("recommendation");
-
-    riskElement.className = "risk";
-
-    if (classification === "normal") {
-      riskElement.textContent = "🟢 Consumo normal";
-      riskElement.classList.add("normal");
-
-      mlDescription.textContent =
-        "El modelo clasificó la lectura como normal.";
-
-      recommendation.textContent =
-        "No se detecta un patrón anormal en este escenario. " +
-        "Continúa revisando tu consumo periódicamente.";
-    }
-
-    if (classification === "warning") {
-      riskElement.textContent = "🟡 Posible fuga";
-      riskElement.classList.add("warning");
-
-      mlDescription.textContent =
-        "El modelo identificó un patrón de consumo elevado.";
-
-      recommendation.textContent =
-        "Revisa llaves, tuberías y sanitarios. " +
-        "Si el consumo continúa elevado, solicita una revisión.";
-    }
-
-    if (classification === "danger") {
-      riskElement.textContent = "🔴 Riesgo alto";
-      riskElement.classList.add("danger");
-
-      mlDescription.textContent =
-        "El modelo identificó un patrón de consumo muy elevado.";
-
-      recommendation.textContent =
-        "Verifica inmediatamente si existe una fuga. " +
-        "Considera solicitar una inspección profesional.";
-    }
-
-    document.getElementById("geoResult").textContent =
-      zone.name +
-      " | Latitud ilustrativa: " + zone.latitude +
-      " | Longitud ilustrativa: " + zone.longitude +
-      ". Ubicación de demostración; no representa un domicilio real.";
-  }
 </script>
 
 </body>
